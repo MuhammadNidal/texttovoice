@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text to Voice Converter</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color:blueviolet;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: yellow;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        textarea {
+            width: 80%;
+            height: 150px;
+            font-size: 16px;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: none;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin-top: 10px;
+            background-color:palevioletred;
+            color:black;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #output {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Text to Voice Converter</h1>
+        <textarea id="text-to-convert" placeholder="Enter text to convert to speech"></textarea>
+        <button id="convert-button">Convert to Voice</button>
+        <div id="output"></div>
+    </div>
+
+    <script>
+        const textToConvert = document.getElementById("text-to-convert");
+        const convertButton = document.getElementById("convert-button");
+        const output = document.getElementById("output");
+
+        const synth = window.speechSynthesis;
+
+        convertButton.addEventListener("click", () => {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+
+            if (textToConvert.value !== "") {
+                const utterance = new SpeechSynthesisUtterance(textToConvert.value);
+                synth.speak(utterance);
+            }
+        });
+
+        synth.onvoiceschanged = () => {
+            const voices = synth.getVoices();
+
+            if (voices && voices.length > 0) {
+                const selectedVoice = voices.find(voice => voice.lang === 'en-US');
+                if (selectedVoice) {
+                    utterance.voice = selectedVoice;
+                }
+            }
+        };
+    </script>
+</body>
+</html>
+
